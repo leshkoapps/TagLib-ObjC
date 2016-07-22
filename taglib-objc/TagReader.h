@@ -10,7 +10,7 @@
 
 @interface TagReader : NSObject
 
-- (id)initWithFileAtPath:(NSString *)path;  //Designated initializer
+- (instancetype)initWithFileAtPath:(NSString *)path;  //Designated initializer
 - (void)loadFileAtPath:(NSString *)path;
 
 - (BOOL)save;
@@ -26,5 +26,11 @@
 @property (nonatomic) NSNumber *track;
 @property (nonatomic) NSString *genre;
 @property (nonatomic) NSData *albumArt;
+
+@property (nonatomic,readonly) NSData *titleData;
+@property (nonatomic,readonly) NSData *artistData;
+@property (nonatomic,readonly) NSData *albumData;
+@property (nonatomic,readonly) NSData *commentData;
+@property (nonatomic,readonly) NSData *genreData;
 
 @end

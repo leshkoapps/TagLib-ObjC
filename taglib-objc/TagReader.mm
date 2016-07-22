@@ -40,22 +40,20 @@ static inline TagLib::String TLStr(NSString *_string)
 @implementation TagReader
 @synthesize path=_path;
 
-- (id)initWithFileAtPath:(NSString *)path
-{
-    if (self = [super init]) {
+- (instancetype)initWithFileAtPath:(NSString *)path{
+    self = [super init];
+    if (self) {
         [self loadFileAtPath:path];
     }
     return self;
 }
-- (id)init
-{
+
+- (instancetype)init{
     return [self initWithFileAtPath:nil];
 }
 
-- (void)loadFileAtPath:(NSString *)path
-{
-    _path = path;
-    
+- (void)loadFileAtPath:(NSString *)path{
+    _path = [path copy];
     if (_path != nil) {
         _file = FileRef([path UTF8String]);
     } else {
@@ -63,108 +61,170 @@ static inline TagLib::String TLStr(NSString *_string)
     }
 }
 
-- (BOOL)save
-{
+- (BOOL)save{
     return (BOOL)_file.save();
 }
-- (BOOL)doubleSave
-{
+
+- (BOOL)doubleSave{
     return [self save] && [self save];
 }
 
-- (NSString *)title
-{
-    if (_file.tag())
-    {
+- (NSString *)title{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
         return NSStr(_file.tag()->title());
     }
-    else{
-        return @"";
+    return nil;
+}
+
+- (void)setTitle:(NSString *)title{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setTitle(TLStr(title));
     }
-    
 }
-- (void)setTitle:(NSString *)title
-{
-    _file.tag()->setTitle(TLStr(title));
+
+- (NSData *)titleData{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+         NSData *titleData = [NSData dataWithBytes:_file.tag()->title().toCString(false) length:_file.tag()->title().length()];
+        return titleData;
+    }
+    return nil;
 }
-- (NSString *)artist
-{
-    if (_file.tag())
-    {
+
+- (NSString *)artist{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
         return NSStr(_file.tag()->artist());
     }
-    
-    return @"";
-    
+    return nil;
 }
-- (void)setArtist:(NSString *)artist
-{
-    _file.tag()->setArtist(TLStr(artist));
+
+- (void)setArtist:(NSString *)artist{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setArtist(TLStr(artist));
+    }
 }
-- (NSString *)album
-{
-    if (_file.tag())
-    {
+
+- (NSData *)artistData{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+        NSData *data = [NSData dataWithBytes:_file.tag()->artist().toCString(false) length:_file.tag()->artist().length()];
+        return data;
+    }
+    return nil;
+}
+
+- (NSString *)album{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
         return NSStr(_file.tag()->album());
     }
-    
-    return @"";
+    return nil;
 }
-- (void)setAlbum:(NSString *)album
-{
-    _file.tag()->setAlbum(TLStr(album));
+
+- (void)setAlbum:(NSString *)album{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setAlbum(TLStr(album));
+    }
 }
-- (NSNumber *)year
-{
-    if (_file.tag())
-    {
+
+- (NSData *)albumData{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+        NSData *data = [NSData dataWithBytes:_file.tag()->album().toCString(false) length:_file.tag()->album().length()];
+        return data;
+    }
+    return nil;
+}
+
+- (NSNumber *)year{
+     NSParameterAssert(_file.tag());
+    if (_file.tag()){
         return [NSNumber numberWithUnsignedInt:_file.tag()->year()];
     }
-    
-    return [NSNumber numberWithUnsignedInt:2000];
+    return nil;
 }
-- (void)setYear:(NSNumber *)year
-{
-    _file.tag()->setYear([year unsignedIntValue]);
+
+- (void)setYear:(NSNumber *)year{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setYear([year unsignedIntValue]);
+    }
 }
-- (NSString *)comment
-{
-    if (_file.tag())
-    {
+
+- (NSString *)comment{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
         return NSStr(_file.tag()->comment());
     }
-    
-    return @"";
+    return nil;
 }
-- (void)setComment:(NSString *)comment
-{
-    _file.tag()->setComment(TLStr(comment));
+
+- (void)setComment:(NSString *)comment{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setComment(TLStr(comment));
+    }
 }
-- (NSNumber *)track
-{
-    return [NSNumber numberWithUnsignedInt:_file.tag()->track()];
+
+- (NSData *)commentData{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+        NSData *data = [NSData dataWithBytes:_file.tag()->comment().toCString(false) length:_file.tag()->comment().length()];
+        return data;
+    }
+    return nil;
 }
-- (void)setTrack:(NSNumber *)track
-{
-    _file.tag()->setTrack([track unsignedIntValue]);
+
+- (NSNumber *)track{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+        return [NSNumber numberWithUnsignedInt:_file.tag()->track()];
+    }
+    return nil;
 }
-- (NSString *)genre
-{
-    return NSStr(_file.tag()->genre());
+
+- (void)setTrack:(NSNumber *)track{
+     NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        _file.tag()->setTrack([track unsignedIntValue]);
+    }
 }
-- (void)setGenre:(NSString *)genre
-{
-    _file.tag()->setGenre(TLStr(genre));
+
+- (NSString *)genre{
+    NSParameterAssert(_file.tag());
+    if(_file.tag()){
+        return NSStr(_file.tag()->genre());
+    }
+    return nil;
 }
-- (NSData *)albumArt
-{
+
+- (void)setGenre:(NSString *)genre{
+    if(_file.tag()){
+        _file.tag()->setGenre(TLStr(genre));
+    }
+}
+
+- (NSData *)genreData{
+    NSParameterAssert(_file.tag());
+    if (_file.tag()){
+        NSData *data = [NSData dataWithBytes:_file.tag()->genre().toCString(false) length:_file.tag()->genre().length()];
+        return data;
+    }
+    return nil;
+}
+
+- (NSData *)albumArt{
     MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
     if (file != NULL) {
         ID3v2::Tag *tag = file->ID3v2Tag();
         if (tag) {
             ID3v2::FrameList frameList = tag->frameListMap()["APIC"];
             ID3v2::AttachedPictureFrame *picture = NULL;
-            
             if (!frameList.isEmpty() && NULL != (picture = dynamic_cast<ID3v2::AttachedPictureFrame *>(frameList.front()))) {
                 TagLib::ByteVector bv = picture->picture();
                 return [NSData dataWithBytes:bv.data() length:bv.size()];
@@ -173,8 +233,7 @@ static inline TagLib::String TLStr(NSString *_string)
     }
     return nil;
 }
-- (void)setAlbumArt:(NSData *)albumArt
-{
+- (void)setAlbumArt:(NSData *)albumArt{
     MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
     if (file != NULL) {
         ID3v2::Tag *tag = file->ID3v2Tag();
@@ -194,8 +253,7 @@ static inline TagLib::String TLStr(NSString *_string)
     }
 }
 
-- (void)dealloc
-{
+- (void)dealloc{
     _path = nil;
 }
 
