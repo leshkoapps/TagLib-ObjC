@@ -79,6 +79,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setTitle:(NSString *)title{
     NSParameterAssert(_file.tag());
+    if(title==nil){
+        title = @"";
+    }
     if(_file.tag()){
         _file.tag()->setTitle(TLStr(title));
     }
@@ -103,6 +106,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setArtist:(NSString *)artist{
     NSParameterAssert(_file.tag());
+    if(artist==nil){
+        artist = @"";
+    }
     if(_file.tag()){
         _file.tag()->setArtist(TLStr(artist));
     }
@@ -127,6 +133,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setAlbum:(NSString *)album{
     NSParameterAssert(_file.tag());
+    if(album==nil){
+        album = @"";
+    }
     if(_file.tag()){
         _file.tag()->setAlbum(TLStr(album));
     }
@@ -151,6 +160,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setYear:(NSNumber *)year{
     NSParameterAssert(_file.tag());
+    if(year==nil){
+        year = @(0);
+    }
     if(_file.tag()){
         _file.tag()->setYear([year unsignedIntValue]);
     }
@@ -166,6 +178,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setComment:(NSString *)comment{
     NSParameterAssert(_file.tag());
+    if(comment==nil){
+        comment = @"";
+    }
     if(_file.tag()){
         _file.tag()->setComment(TLStr(comment));
     }
@@ -190,6 +205,9 @@ static inline TagLib::String TLStr(NSString *_string)
 
 - (void)setTrack:(NSNumber *)track{
      NSParameterAssert(_file.tag());
+    if(track==nil){
+        track = @(0);
+    }
     if(_file.tag()){
         _file.tag()->setTrack([track unsignedIntValue]);
     }
@@ -204,6 +222,10 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setGenre:(NSString *)genre{
+    NSParameterAssert(_file.tag());
+    if(genre==nil){
+        genre = @"";
+    }
     if(_file.tag()){
         _file.tag()->setGenre(TLStr(genre));
     }
@@ -241,8 +263,7 @@ static inline TagLib::String TLStr(NSString *_string)
             tag->removeFrames("APIC");
             if (albumArt != nil && [albumArt length] > 0) {
                 ID3v2::AttachedPictureFrame *picture = new ID3v2::AttachedPictureFrame();
-                
-                TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], [albumArt length]);
+                TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], (uint)[albumArt length]);
                 picture->setPicture(bv);
                 picture->setMimeType(String("image/jpg"));
                 picture->setType(ID3v2::AttachedPictureFrame::FrontCover);
