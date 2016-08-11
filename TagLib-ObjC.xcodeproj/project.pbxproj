@@ -1464,6 +1464,7 @@
 		450846FA159F3A6600264051 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0730;
 				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 450846FD159F3A6600264051 /* Build configuration list for PBXProject "TagLib-ObjC" */;
