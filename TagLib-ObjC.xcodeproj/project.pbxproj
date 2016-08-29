@@ -125,7 +125,6 @@
 		45084B32159F725F00264051 /* wavpackproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 450847E8159F3B1700264051 /* wavpackproperties.h */; settings = {ATTRIBUTES = (); }; };
 		45084B33159F725F00264051 /* xmfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 450847EB159F3B1700264051 /* xmfile.h */; settings = {ATTRIBUTES = (); }; };
 		45084B34159F725F00264051 /* xmproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 450847ED159F3B1700264051 /* xmproperties.h */; settings = {ATTRIBUTES = (); }; };
-		45084B37159FBAD000264051 /* TagReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 45084B35159FBAD000264051 /* TagReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		45084B38159FBAD000264051 /* TagReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45084B36159FBAD000264051 /* TagReader.mm */; };
 		4520B06315A1B76B00907235 /* 005411.id3 in Resources */ = {isa = PBXBuildFile; fileRef = 4520B03615A1B76B00907235 /* 005411.id3 */; };
 		4520B06415A1B76B00907235 /* 64bit.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4520B03715A1B76B00907235 /* 64bit.mp4 */; };
@@ -1374,14 +1373,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		45084A6E159F48E400264051 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				45084B37159FBAD000264051 /* TagReader.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1408,7 +1399,6 @@
 			buildPhases = (
 				45084A6C159F48E400264051 /* Sources */,
 				45084A6D159F48E400264051 /* Frameworks */,
-				45084A6E159F48E400264051 /* Headers */,
 			);
 			buildRules = (
 			);
