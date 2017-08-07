@@ -41,6 +41,10 @@ static inline TagLib::String TLStr(NSString *_string)
 @synthesize path=_path;
 
 - (instancetype)initWithFileAtPath:(NSString *)path{
+    NSCParameterAssert([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:nil]);
+    if([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:nil]==NO){
+        return nil;
+    }
     self = [super init];
     if (self) {
         [self loadFileAtPath:path];
