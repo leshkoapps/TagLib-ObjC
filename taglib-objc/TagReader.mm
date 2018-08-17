@@ -74,7 +74,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSString *)title{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         return NSStr(_file.tag()->title());
     }
@@ -82,7 +81,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setTitle:(NSString *)title{
-    NSParameterAssert(_file.tag());
     if(title==nil){
         title = @"";
     }
@@ -92,7 +90,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)titleData{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
          NSData *titleData = [NSData dataWithBytes:_file.tag()->title().toCString(false) length:_file.tag()->title().length()];
         return titleData;
@@ -101,7 +98,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSString *)artist{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         return NSStr(_file.tag()->artist());
     }
@@ -109,7 +105,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setArtist:(NSString *)artist{
-    NSParameterAssert(_file.tag());
     if(artist==nil){
         artist = @"";
     }
@@ -119,7 +114,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)artistData{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         NSData *data = [NSData dataWithBytes:_file.tag()->artist().toCString(false) length:_file.tag()->artist().length()];
         return data;
@@ -128,7 +122,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSString *)album{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         return NSStr(_file.tag()->album());
     }
@@ -136,7 +129,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setAlbum:(NSString *)album{
-    NSParameterAssert(_file.tag());
     if(album==nil){
         album = @"";
     }
@@ -146,7 +138,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)albumData{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         NSData *data = [NSData dataWithBytes:_file.tag()->album().toCString(false) length:_file.tag()->album().length()];
         return data;
@@ -155,7 +146,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSNumber *)year{
-     NSParameterAssert(_file.tag());
     if (_file.tag()){
         return [NSNumber numberWithUnsignedInt:_file.tag()->year()];
     }
@@ -163,7 +153,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setYear:(NSNumber *)year{
-    NSParameterAssert(_file.tag());
     if(year==nil){
         year = @(0);
     }
@@ -173,7 +162,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSString *)comment{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         return NSStr(_file.tag()->comment());
     }
@@ -181,7 +169,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setComment:(NSString *)comment{
-    NSParameterAssert(_file.tag());
     if(comment==nil){
         comment = @"";
     }
@@ -191,7 +178,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)commentData{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         NSData *data = [NSData dataWithBytes:_file.tag()->comment().toCString(false) length:_file.tag()->comment().length()];
         return data;
@@ -200,7 +186,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSNumber *)track{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         return [NSNumber numberWithUnsignedInt:_file.tag()->track()];
     }
