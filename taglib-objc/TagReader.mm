@@ -193,7 +193,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setTrack:(NSNumber *)track{
-     NSParameterAssert(_file.tag());
     if(track==nil){
         track = @(0);
     }
@@ -203,7 +202,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSString *)genre{
-    NSParameterAssert(_file.tag());
     if(_file.tag()){
         return NSStr(_file.tag()->genre());
     }
@@ -211,7 +209,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setGenre:(NSString *)genre{
-    NSParameterAssert(_file.tag());
     if(genre==nil){
         genre = @"";
     }
@@ -221,7 +218,6 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)genreData{
-    NSParameterAssert(_file.tag());
     if (_file.tag()){
         NSData *data = [NSData dataWithBytes:_file.tag()->genre().toCString(false) length:_file.tag()->genre().length()];
         return data;
