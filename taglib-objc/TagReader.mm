@@ -10,6 +10,7 @@
 
 #include <fileref.h>
 #include "mpegfile.h"
+#include "flacfile.h"
 #include "id3v2tag.h"
 #include "id3v2frame.h"
 #include "id3v2header.h"
@@ -238,8 +239,24 @@ static inline TagLib::String TLStr(NSString *_string)
             }
         }
     }
+    
+    FLAC::File *flac_file = dynamic_cast<FLAC::File *>(_file.file());
+    if (flac_file != NULL) {
+        List<FLAC::Picture *> theList = flac_file->pictureList();
+        for (List<FLAC::Picture *>::Iterator it=theList.begin(); it != theList.end(); ++it){
+            FLAC::Picture *thePicture = *it;
+            if (thePicture->type() == FLAC::Picture::FrontCover){
+                TagLib::ByteVector bv = thePicture->data();
+                return [NSData dataWithBytes:bv.data() length:bv.size()];
+            }
+        }
+    }
     return nil;
 }
+
+
+
+
 - (void)setAlbumArt:(NSData *)albumArt{
     MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
     if (file != NULL) {
@@ -252,10 +269,33 @@ static inline TagLib::String TLStr(NSString *_string)
                 picture->setPicture(bv);
                 picture->setMimeType(String("image/jpg"));
                 picture->setType(ID3v2::AttachedPictureFrame::FrontCover);
-                
                 tag->addFrame(picture);
             }
         }
+    }
+    
+    //example https://github.com/taglib/taglib/issues/668
+    //https://www.rubydoc.info/github/robinst/taglib-ruby/TagLib/FLAC/File
+    
+    FLAC::File *flac_file = dynamic_cast<FLAC::File *>(_file.file());
+    if (flac_file != NULL) {
+        TagLib::FLAC::Picture *picture = new TagLib::FLAC::Picture();
+        picture->setType(TagLib::FLAC::Picture::FrontCover);
+        picture->setMimeType(String("image/jpg"));
+        TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], (uint)[albumArt length]);
+        picture->setData(bv);
+        
+        //remove old pictures
+        List<FLAC::Picture *> theList = flac_file->pictureList();
+        for (List<FLAC::Picture *>::Iterator it=theList.begin(); it != theList.end(); ++it){
+            FLAC::Picture *thePicture = *it;
+            if (thePicture->type() == FLAC::Picture::FrontCover){
+                flac_file->removePicture(thePicture);
+                break;
+            }
+        }
+        
+        flac_file->addPicture(picture);
     }
 }
 
