@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+
+extern NSString * const TagReaderDidSaveFileNotification;
+extern NSString * const TagReaderFilePath;
+
 @interface TagReader : NSObject
 
 - (instancetype)initWithFileAtPath:(NSString *)path;  //Designated initializer
 - (void)loadFileAtPath:(NSString *)path;
 
-- (BOOL)save;
 - (BOOL)doubleSave; //Some filetypes require being saved twice (unknown reasons), if saving with - save doesn't work, try -doubleSave. 
 
 @property (readonly) NSString *path;

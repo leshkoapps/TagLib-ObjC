@@ -16,6 +16,9 @@
 #include "id3v2header.h"
 #include "attachedpictureframe.h"
 
+NSString * const TagReaderDidSaveFileNotification = @"TagReaderDidSaveFileNotification";
+NSString * const TagReaderFilePath = @"TagReaderFilePath";
+
 using namespace TagLib;
 
 static inline NSString *NSStr(TagLib::String _string)
@@ -37,6 +40,7 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 @end
+
 
 @implementation TagReader
 @synthesize path=_path;
@@ -71,7 +75,12 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (BOOL)doubleSave{
-    return [self save] && [self save];
+    BOOL result = [self save] && [self save];
+    NSDictionary *userInfo = @{TagReaderFilePath:_path?:@""};
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:TagReaderDidSaveFileNotification object:self userInfo:userInfo];
+    });
+    return result;
 }
 
 - (NSString *)title{
@@ -279,13 +288,7 @@ static inline TagLib::String TLStr(NSString *_string)
     
     FLAC::File *flac_file = dynamic_cast<FLAC::File *>(_file.file());
     if (flac_file != NULL) {
-        TagLib::FLAC::Picture *picture = new TagLib::FLAC::Picture();
-        picture->setType(TagLib::FLAC::Picture::FrontCover);
-        picture->setMimeType(String("image/jpg"));
-        TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], (uint)[albumArt length]);
-        picture->setData(bv);
         
-        //remove old pictures
         List<FLAC::Picture *> theList = flac_file->pictureList();
         for (List<FLAC::Picture *>::Iterator it=theList.begin(); it != theList.end(); ++it){
             FLAC::Picture *thePicture = *it;
@@ -295,7 +298,15 @@ static inline TagLib::String TLStr(NSString *_string)
             }
         }
         
-        flac_file->addPicture(picture);
+        if (albumArt != nil && [albumArt length] > 0) {
+            TagLib::FLAC::Picture *picture = new TagLib::FLAC::Picture();
+            picture->setType(TagLib::FLAC::Picture::FrontCover);
+            picture->setMimeType(String("image/jpg"));
+            TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], (uint)[albumArt length]);
+            picture->setData(bv);
+            flac_file->addPicture(picture);
+        }
+
     }
 }
 
