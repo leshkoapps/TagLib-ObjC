@@ -235,7 +235,7 @@ static inline TagLib::String TLStr(NSString *_string)
     return nil;
 }
 
-- (NSData *)albumArt{
+- (NSData *)albumArtData{
     MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
     if (file != NULL) {
         ID3v2::Tag *tag = file->ID3v2Tag();
@@ -244,7 +244,9 @@ static inline TagLib::String TLStr(NSString *_string)
             ID3v2::AttachedPictureFrame *picture = NULL;
             if (!frameList.isEmpty() && NULL != (picture = dynamic_cast<ID3v2::AttachedPictureFrame *>(frameList.front()))) {
                 TagLib::ByteVector bv = picture->picture();
-                return [NSData dataWithBytes:bv.data() length:bv.size()];
+                if(bv.size()>0){
+                    return [NSData dataWithBytes:bv.data() length:bv.size()];
+                }
             }
         }
     }
@@ -256,17 +258,16 @@ static inline TagLib::String TLStr(NSString *_string)
             FLAC::Picture *thePicture = *it;
             if (thePicture->type() == FLAC::Picture::FrontCover){
                 TagLib::ByteVector bv = thePicture->data();
-                return [NSData dataWithBytes:bv.data() length:bv.size()];
+                if(bv.size()>0){
+                    return [NSData dataWithBytes:bv.data() length:bv.size()];
+                }
             }
         }
     }
     return nil;
 }
 
-
-
-
-- (void)setAlbumArt:(NSData *)albumArt{
+- (void)setAlbumArtData:(NSData *)albumArt{
     MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
     if (file != NULL) {
         ID3v2::Tag *tag = file->ID3v2Tag();
