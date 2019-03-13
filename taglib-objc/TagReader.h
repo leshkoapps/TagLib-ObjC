@@ -30,6 +30,11 @@ extern NSString * const TagReaderFilePath;
 @property (nonatomic) NSString *genre;
 @property (nonatomic) NSData *albumArtData;
 
+- (NSNumber *)duration;
+- (NSNumber *)bitrate;
+- (NSNumber *)sampleRate;
+- (NSNumber *)channels;
+
 @property (nonatomic,readonly) NSData *titleData;
 @property (nonatomic,readonly) NSData *artistData;
 @property (nonatomic,readonly) NSData *albumData;

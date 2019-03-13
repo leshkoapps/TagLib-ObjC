@@ -162,6 +162,34 @@ static inline TagLib::String TLStr(NSString *_string)
     return nil;
 }
 
+- (NSNumber *)duration{
+    if(_file.audioProperties()){
+        return @(_file.audioProperties()->length());
+    }
+    return nil;
+}
+
+- (NSNumber *)bitrate{
+    if(_file.audioProperties()){
+        return @(_file.audioProperties()->bitrate());
+    }
+    return nil;
+}
+
+- (NSNumber *)sampleRate{
+    if(_file.audioProperties()){
+        return @(_file.audioProperties()->sampleRate());
+    }
+    return nil;
+}
+
+- (NSNumber *)channels{
+    if(_file.audioProperties()){
+        return @(_file.audioProperties()->channels());
+    }
+    return nil;
+}
+
 - (void)setYear:(NSNumber *)year{
     if(year==nil){
         year = @(0);
