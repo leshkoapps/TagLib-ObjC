@@ -9,6 +9,7 @@
 #import "TagReader.h"
 
 #include <fileref.h>
+#include "aifffile.h"
 #include "mpegfile.h"
 #include "flacfile.h"
 #include "id3v2tag.h"
@@ -264,9 +265,10 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (NSData *)albumArtData{
-    MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
-    if (file != NULL) {
-        ID3v2::Tag *tag = file->ID3v2Tag();
+    
+    MPEG::File *mpeg_file = dynamic_cast<MPEG::File *>(_file.file());
+    if (mpeg_file != NULL) {
+        ID3v2::Tag *tag = mpeg_file->ID3v2Tag();
         if (tag) {
             ID3v2::FrameList frameList = tag->frameListMap()["APIC"];
             ID3v2::AttachedPictureFrame *picture = NULL;
@@ -274,6 +276,32 @@ static inline TagLib::String TLStr(NSString *_string)
                 TagLib::ByteVector bv = picture->picture();
                 if(bv.size()>0){
                     return [NSData dataWithBytes:bv.data() length:bv.size()];
+                }
+            }
+        }
+    }
+    
+    RIFF::AIFF::File *aiff_file = dynamic_cast<RIFF::AIFF::File *>(_file.file());
+    if (aiff_file != NULL) {
+        /*!
+         * Returns the Tag for this file.
+         *
+         * \note This always returns a valid pointer regardless of whether or not
+         * the file on disk has an ID3v2 tag.  Use hasID3v2Tag() to check if the file
+         * on disk actually has an ID3v2 tag.
+         *
+         * \see hasID3v2Tag()
+         */
+        if(aiff_file->hasID3v2Tag()){
+            ID3v2::Tag *tag = aiff_file->tag();
+            if (tag) {
+                ID3v2::FrameList frameList = tag->frameListMap()["APIC"];
+                ID3v2::AttachedPictureFrame *picture = NULL;
+                if (!frameList.isEmpty() && NULL != (picture = dynamic_cast<ID3v2::AttachedPictureFrame *>(frameList.front()))) {
+                    TagLib::ByteVector bv = picture->picture();
+                    if(bv.size()>0){
+                        return [NSData dataWithBytes:bv.data() length:bv.size()];
+                    }
                 }
             }
         }
@@ -296,9 +324,26 @@ static inline TagLib::String TLStr(NSString *_string)
 }
 
 - (void)setAlbumArtData:(NSData *)albumArt{
-    MPEG::File *file = dynamic_cast<MPEG::File *>(_file.file());
-    if (file != NULL) {
-        ID3v2::Tag *tag = file->ID3v2Tag();
+    
+    MPEG::File *mpeg_file = dynamic_cast<MPEG::File *>(_file.file());
+    if (mpeg_file != NULL) {
+        ID3v2::Tag *tag = mpeg_file->ID3v2Tag();
+        if (tag) {
+            tag->removeFrames("APIC");
+            if (albumArt != nil && [albumArt length] > 0) {
+                ID3v2::AttachedPictureFrame *picture = new ID3v2::AttachedPictureFrame();
+                TagLib::ByteVector bv = ByteVector((const char *)[albumArt bytes], (uint)[albumArt length]);
+                picture->setPicture(bv);
+                picture->setMimeType(String("image/jpg"));
+                picture->setType(ID3v2::AttachedPictureFrame::FrontCover);
+                tag->addFrame(picture);
+            }
+        }
+    }
+    
+    RIFF::AIFF::File *aiff_file = dynamic_cast<RIFF::AIFF::File *>(_file.file());
+    if (aiff_file != NULL) {
+        ID3v2::Tag *tag = aiff_file->tag();
         if (tag) {
             tag->removeFrames("APIC");
             if (albumArt != nil && [albumArt length] > 0) {
@@ -337,6 +382,7 @@ static inline TagLib::String TLStr(NSString *_string)
         }
 
     }
+    
 }
 
 - (void)dealloc{
