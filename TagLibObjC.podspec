@@ -9,5 +9,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'
   s.source_files = '*.{h,cpp}', 'taglib-objc/*.{h,m}', 'taglib-src/taglib/*.{h,cpp}', 'taglib-src/taglib/**/.{h,cpp}', 'taglib-src/3rdparty/**/.{h,cpp}'
   s.requires_arc = true
-  s.frameworks = 'Foundation', 'CFNetwork'
+  s.framework = 'Foundation'
+  s.library   = "stdc++"
 end
