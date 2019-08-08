@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author       = { "Enea" => "https://github.com/eni9889" }
   s.source       = { :git => "https://github.com/leshkoapps/TagLib-ObjC.git", :tag => s.version.to_s, :submodules => true }
   s.ios.deployment_target = '7.0'
-  s.source_files = '*.{h}', 'taglib-objc/*.{h,mm}', 'taglib-src/taglib/**/*.{h,cpp}'
+  s.source_files = '*.{h}', 'taglib-objc/*.{h,mm}', 'taglib-src/taglib/**/*.{h,cpp,tcc}'
   s.requires_arc = true
   s.framework = 'Foundation'
   s.library = 'c++'
